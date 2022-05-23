@@ -43,15 +43,22 @@ fitControl <- trainControl(method = "repeatedcv",
 model.cv <- train(Transported ~ ., 
                   data = faketrain,
                   method = "pls",
-                  trControl = fitControl)
+                  control = fitControl)
 
 
 plsProbs <- predict(model.cv, newdata = faketest, type = "prob")
-faketest$Transported = as.factor(faketest$Transported)
 
 eldata <- plsProbs %>% mutate(prediction = True>False)
 
-merged <- merge(eldata, faketest)
+eldata$cake = ifelse(eldata$prediction==TRUE, "True", "False")
 
-sucess <- merged %>% select(prediction, Transported) %>% mutate(trueTrue = ifelse(prediction==TRUE & Transported %in% "True", 1, 0), trueFalse = ifelse(prediction==FALSE & Transported %in% "False", 1, 0), falseTrue = ifelse(prediction==TRUE & Transported %in% "False", 1, 0), falseFalse = ifelse(prediction==FALSE & Transported %in% "True", 1, 0))
+eldata$cake <- as.factor(eldata$cake)
+
+merged <- mutate(eldata, Transported = faketest$Transported)
+
+confusionMatrix(data = merged$cake, reference = merged$Transported)
+
+sucess <- merged %>% select(cake, Transported) %>% mutate(trueTrue = ifelse(prediction==TRUE & Transported %in% "True", 1, 0), trueFalse = ifelse(prediction==FALSE & Transported %in% "False", 1, 0), falseTrue = ifelse(prediction==TRUE & Transported %in% "False", 1, 0), falseFalse = ifelse(prediction==FALSE & Transported %in% "True", 1, 0))
 summary(sucess)
+
+getModelInfo("adaboost")
