@@ -1,6 +1,5 @@
 #Spacy
 rm(list=ls())
-setwd("./spaceship-titanic/")
 train <- read.csv("train.csv")
 test <- read.csv("test.csv")
 
@@ -17,17 +16,11 @@ train1 <- train %>% separate(PassengerId, into=c("firstID", "secondID"), sep = "
   mutate(last1 = as.factor(last1), last2 = as.factor(last2), last3 = as.factor(last3), last4 = as.factor(last4), last5 = as.factor(last5), last6 = as.factor(last6), last7 = as.factor(last7), last8 = as.factor(last8), last9 = as.factor(last9), last10 = as.factor(last10), last11 = as.factor(last11)) %>% 
   mutate(hadRS = is.na(RoomService), hadFC = is.na(FoodCourt), hadSPA = is.na(Spa), hadMALL = is.na(ShoppingMall), hadVR = is.na(VRDeck)) %>% 
   mutate(RoomService = ifelse(is.na(RoomService), 0, RoomService), FoodCourt = ifelse(is.na(FoodCourt), 0, FoodCourt), Spa = ifelse(is.na(Spa), 0, Spa), ShoppingMall = ifelse(is.na(ShoppingMall), 0, ShoppingMall), VRDeck = ifelse(is.na(VRDeck), 0, VRDeck), Age = ifelse(is.na(Age), mean(Age, na.rm = TRUE), Age)) %>% 
-  mutate(firstID = as.numeric(firstID), secondID = as.numeric(secondID)) %>% 
-  separate(Cabin, into = c("deck", "num", "side"), sep = "/") %>% 
-  mutate(deck = as.factor(deck), num = as.numeric(num)) %>% 
-  mutate(is_homeless = ifelse(is.na(num), "True", "False")) %>% 
-  mutate(is_homeless = as.factor(is_homeless), num = ifelse(is.na(num), -1, num), side = ifelse(is.na(side), "TrashCompactor", side)) %>% 
-  mutate(side = as.factor(side))
-  
+  mutate(firstID = as.numeric(firstID), secondID = as.numeric(secondID))
+
 
 
 summary(train1)
-summary(thingy)
 thingy = select(train1, firstID, secondID, Age, RoomService, FoodCourt, ShoppingMall, Spa, VRDeck, firstnamelength, lastnamelength, Transported)
 
 
@@ -47,8 +40,9 @@ fitControl <- trainControl(method = "repeatedcv",
 
 model.cv <- train(Transported ~ ., 
                   data = faketrain,
-                  method = "adaboost",
-                  allowParallel = TRUE)
+                  method = "mlp",
+                  allowParallel = TRUE,
+                  size = 10)
 
 
 plsProbs <- predict(model.cv, newdata = faketest, type = "prob")
@@ -61,9 +55,7 @@ eldata$cake <- as.factor(eldata$cake)
 
 merged <- mutate(eldata, Transported = faketest$Transported)
 
-confusionMatrix(data = merged$cake, reference = merged$Transported)
-
-sucess <- merged %>% select(cake, Transported) %>% mutate(trueTrue = ifelse(prediction==TRUE & Transported %in% "True", 1, 0), trueFalse = ifelse(prediction==FALSE & Transported %in% "False", 1, 0), falseTrue = ifelse(prediction==TRUE & Transported %in% "False", 1, 0), falseFalse = ifelse(prediction==FALSE & Transported %in% "True", 1, 0))
-summary(sucess)
-
-getModelInfo("adaboost")
+y <- confusionMatrix(data = merged$cake, reference = merged$Transported)
+fileConn<- file("MPLoutput.txt")
+writeLines(toString(y), fileConn)
+close(fileConn)
