@@ -9,8 +9,8 @@ library(caret)
 train$Transported = as.factor(train$Transported)
 summary(train)
 
-#This is a problem we want to come back to later. These wont have much of an effect on the result
-train <- train %>% select(-deck, -sideTrashCompactor)
+
+
 #finding corralations, there are none
 descrCor <-  cor(select(train, -Transported))
 highCorr <- sum(abs(descrCor[upper.tri(descrCor)]) > .999)
@@ -33,15 +33,13 @@ fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
   number = 10,
   ## repeated ten times
-  repeats = 10)
+  repeats = 5)
 
 gbmFit1 <- train(Transported ~ ., data = faketrain, 
-                 method = "nnet", 
+                 method = "mlp", 
                  trControl = fitControl,
-                 ## This last option is actually one
-                 ## for gbm() that passes through
-                 tunelength = 20
-              )
+                 tunelength = 15,
+                 verbose = FALSE)
 
 
 
@@ -57,6 +55,6 @@ merged <- mutate(eldata, Transported = faketest$Transported)
 
 y <- confusionMatrix(data = merged$cake, reference = merged$Transported)
 y
-fileConn<- file("outputs\\nnetoutput.txt")
+fileConn<- file("outputs\\MLPoutput.txt")
 writeLines(toString(y), fileConn)
 close(fileConn)

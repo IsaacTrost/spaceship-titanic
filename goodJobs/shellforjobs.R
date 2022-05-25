@@ -9,12 +9,8 @@ library(caret)
 train$Transported = as.factor(train$Transported)
 summary(train)
 
-#This is a problem we want to come back to later. These wont have much of an effect on the result
-nearZeroVar(trainTransformed)
 
-#finding corralations, there are none
-descrCor <-  cor(select(train, -Transported))
-highCorr <- sum(abs(descrCor[upper.tri(descrCor)]) > .999)
+
 
 preProcValues <- preProcess(train, method = c("center", "scale"))
 
@@ -60,3 +56,5 @@ y
 fileConn<- file("outputs\\MPLoutput.txt")
 writeLines(toString(y), fileConn)
 close(fileConn)
+
+save.image(file='Models\\MPLModel.RData')
