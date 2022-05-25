@@ -24,7 +24,7 @@ faketest <- trainTransformed[-vec,]
 
 fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
-  number = 10,
+  number = 10, 
   ## repeated ten times
   repeats = 10)
 
@@ -33,7 +33,8 @@ gbmFit1 <- train(Transported ~ ., data = faketrain,
                  trControl = fitControl,
                  ## This last option is actually one
                  ## for gbm() that passes through
-                 verbose = TRUE)
+                 verbose = FALSE,
+                 allowParallel = TRUE)
 
 
 

@@ -36,8 +36,8 @@ vec <- createDataPartition(
   list=FALSE
 )
 
-faketrain <- train1[vec,]
-faketest <- train1[-vec,]
+faketrain <- thingy[vec,]
+faketest <- thingy[-vec,]
 
 fitControl <- trainControl(method = "repeatedcv", 
                            number = 10,
