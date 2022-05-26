@@ -7,6 +7,10 @@ library(caret)
 
 
 train$Transported = as.factor(train$Transported)
+summary(train)
+
+
+
 
 preProcValues <- preProcess(train, method = c("center", "scale"))
 
@@ -26,14 +30,12 @@ fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
   number = 10,
   ## repeated ten times
-  repeats = 10)
+  repeats = 10) 
 
 gbmFit1 <- train(Transported ~ ., data = faketrain, 
-                 method = "wsrf", 
+                 method = "adaboost", 
                  trControl = fitControl,
-                 ## This last option is actually one
-                 ## for gbm() that passes through
-                 tuneLength = 20
+                 tuneLength = 20,
                  )
 
 
@@ -44,14 +46,14 @@ eldata <- plsProbs %>% mutate(prediction = True>False)
 
 eldata$cake = ifelse(eldata$prediction==TRUE, "True", "False")
 
-eldata$cake <- as.factor(eldata$cake)
+eldata$cake <- as.factor(eldata$cake) 
 
 merged <- mutate(eldata, Transported = faketest$Transported)
 
 y <- confusionMatrix(data = merged$cake, reference = merged$Transported)
-
-fileConn<- file("outputs\\swrf2output.R")
+y
+fileConn<- file("outputs\\adaoutput.txt")
 writeLines(toString(y), fileConn)
 close(fileConn)
 
-save.image(file='Models\\swrf2Model.RData')
+save.image(file='Models\\adaModel.RData')
