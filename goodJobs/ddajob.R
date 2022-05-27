@@ -33,6 +33,7 @@ gbmFit1 <- train(Transported ~ ., data = faketrain,
                  trControl = fitControl,
                  ## This last option is actually one
                  ## for gbm() that passes through
+                 tuneLength = 20
                  )
 
 
@@ -49,6 +50,8 @@ merged <- mutate(eldata, Transported = faketest$Transported)
 
 y <- confusionMatrix(data = merged$cake, reference = merged$Transported)
 
-fileConn<- file("outputs\\swrfoutput.R")
+fileConn<- file("outputs\\swrf2output.R")
 writeLines(toString(y), fileConn)
 close(fileConn)
+
+save.image(file='Models\\swrf2Model.RData')
