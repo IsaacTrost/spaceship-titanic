@@ -25,6 +25,7 @@ vec <- createDataPartition(
 
 faketrain <- trainTransformed[vec,]
 faketest <- trainTransformed[-vec,]
+typeof(trainTransformed$Transported)
 
 fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
