@@ -24,9 +24,9 @@ faketest <- trainTransformed[-vec,]
 
 fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
-  number = 10, 
+  number = 5, 
   ## repeated ten times
-  repeats = 10)
+  repeats = 5)
 
 gbmFit1 <- train(Transported ~ ., data = faketrain, 
                  method = "deepboost", 

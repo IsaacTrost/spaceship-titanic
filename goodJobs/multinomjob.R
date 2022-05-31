@@ -16,7 +16,7 @@ preProcValues <- preProcess(train, method = c("center", "scale"))
 
 trainTransformed <- predict(preProcValues, train)
 
-set.seed(1623)
+set.seed(623)
 vec <- createDataPartition(
   y=trainTransformed$Transported,
   p=.75,
