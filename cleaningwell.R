@@ -5,6 +5,8 @@ test <- read.csv("test.csv")
 
 library(tidyverse)
 library(caret)
+#These rows are added and removed to ensure that each of the many columns that hold letters have every character that they
+#need to have, and are not missing any if, say there was never a y in the 7th position of the first name
 y = c("aaaaaaa aaaaaaaaaaa", "bbbbbbb bbbbbbbbbbb", "ccccccc ccccccccccc", "ddddddd ddddddddddd", "eeeeeee eeeeeeeeeee", "fffffff fffffffffff", "ggggggg ggggggggggg", "hhhhhhh hhhhhhhhhhh", "iiiiiii iiiiiiiiiii", "jjjjjjj jjjjjjjjjjj", "kkkkkkk kkkkkkkkkkk", "lllllll lllllllllll", "mmmmmmm mmmmmmmmmmm", "nnnnnnn nnnnnnnnnnn", "ooooooo ooooooooooo", "ppppppp ppppppppppp", "qqqqqqq qqqqqqqqqqq", "rrrrrrr rrrrrrrrrrr", "sssssss sssssssssss", "ttttttt ttttttttttt", "uuuuuuu uuuuuuuuuuu", "vvvvvvv vvvvvvvvvvv", "wwwwwww wwwwwwwwwww", "xxxxxxx xxxxxxxxxxx", "yyyyyyy yyyyyyyyyyy", "zzzzzzz zzzzzzzzzzz")
 for (name in y){
   train[nrow(train) + 1,] <- train[nrow(train),]

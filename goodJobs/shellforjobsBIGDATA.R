@@ -1,9 +1,12 @@
+library(tidyverse)
+library(caret)
+
 rm(list=ls())
+#Loads in the big datasets, that includes the names
 train <- read.csv("withnameTrain2.csv")
 test <- read.csv("withnameTest2.csv")
 
-library(tidyverse)
-library(caret)
+
 
 
 
