@@ -25,7 +25,6 @@ vec <- createDataPartition(
 
 faketrain <- trainTransformed[vec,]
 faketest <- trainTransformed[-vec,]
-typeof(trainTransformed$Transported)
 
 fitControl <- trainControl(## 10-fold CV
   method = "repeatedcv",
@@ -54,8 +53,8 @@ merged <- mutate(eldata, Transported = faketest$Transported)
 
 y <- confusionMatrix(data = merged$cake, reference = merged$Transported)
 y
-fileConn<- file("outputs/GBMoutput.txt")
+fileConn<- file("outputs\\MPLoutput.txt")
 writeLines(toString(y), fileConn)
 close(fileConn)
 
-save.image(file='Models/GBMModel.RData')
+save.image(file='Models\\MPLModel.RData')
